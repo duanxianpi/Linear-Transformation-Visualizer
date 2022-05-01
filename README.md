@@ -1,5 +1,5 @@
 # Linear Transformation Math Visualizer
-An Elm based integral Linear Transformation Math Visualizer. It can help people understand how the linear transformation works and the corrsponding matrix to each transforamtions. Try out here [](https://duanxianpi.github.io/Linear-Transformation-Visualizer/)
+An Elm based integral Linear Transformation Math Visualizer. It can help people understand how the linear transformation works and the corrsponding matrix to each transforamtions. Try out [here](https://duanxianpi.github.io/Linear-Transformation-Visualizer/)!
 
 # Install
 1. First step, Install ```Elm```. If you have your ```Node``` installed, you can use the following command to install ```Elm```.
