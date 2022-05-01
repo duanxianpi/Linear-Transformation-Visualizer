@@ -8,7 +8,7 @@ npm install -g elm
 ```
 2. Clone this repository
 ```
-git clone 
+git clone https://github.com/duanxianpi/Linear-Transformation-Visualizer
 ``` 
 # Compile
 ```
