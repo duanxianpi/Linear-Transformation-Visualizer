@@ -41,15 +41,15 @@ myShapes model page =
                 |> size 5
                 |> filled black
                 |> move ( -100.5, 35 )
-            , L03G1MatrixModel2.latex2Svg "T(x)=Ax" |> move ( -80.5, 33 )
+            , L03G1MatrixModel2.latex2Svg "T(x)=Ax" |> move ( -140+63, 38 )
             , text "Ax is the mutiple of two matrix"
                 |> alignLeft
                 |> sansserif
                 |> size 5
                 |> filled black
                 |> move ( -100.5, 20 )
-            , L03G1MatrixModel2.latex2Svg "\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}\\begin{bmatrix}e&f\\\\g&h\\end{bmatrix} =" |> move ( -100.5, 15 )
-            , L03G1MatrixModel2.latex2Svg "\\small\\begin{bmatrix}a*e+b*g & a*f+b*h\\\\c*e+d*g & c*f+d*h\\end{bmatrix}" |> move ( -100.5, -2 )
+            , L03G1MatrixModel2.latex2Svg "\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}\\begin{bmatrix}e&f\\\\g&h\\end{bmatrix} =" |> move ( -140+43, 20 )
+            , L03G1MatrixModel2.latex2Svg "\\small\\begin{bmatrix}a*e+b*g & a*f+b*h\\\\c*e+d*g & c*f+d*h\\end{bmatrix}" |> move (-140+43, 3 )
             , text "Now let calculate all the "
                 |> alignLeft
                 |> sansserif
@@ -66,7 +66,7 @@ myShapes model page =
                 |> group
 
         2 ->
-            [ L03G1MatrixModel2.latex2Svg "A = " |> move ( -100.5, 40 )
+            [ L03G1MatrixModel2.latex2Svg "A = " |> move ( -100, 50 )
             ]
                 |> group
 

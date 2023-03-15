@@ -51,33 +51,33 @@ introduction =
 
 
 step1 =
-    [ "▪ Using plus button add a shape"
-    , "▪ Click pen to customize the shape"
-    , "▪ There are some useful settings in"
+    [ "- Using plus button add a shape"
+    , "- Click pen to customize the shape"
+    , "- There are some useful settings in"
     , "  the settings"
-    , "▪ Press Right Arrow to continue"
+    , "- Press Right Arrow to continue"
     ]
 
 
 step2 =
-    [ "▪ Try each transformation"
-    , "▪ Change Rad/Deg Mode in settings"
-    , "▪ Moving mouse to each point to check"
+    [ "- Try each transformation"
+    , "- Change Rad/Deg Mode in settings"
+    , "- Moving mouse to each point to check"
     , "  coordinate"
     ]
 
 
 step3 =
-    [ "▪ Check out the calculation process!"
+    [ "- Check out the calculation process!"
     ]
 
 
 ps =
-    [ "▪ The graph on the right side can always"
+    [ "- The graph on the right side can always"
     , "  be dragged and scaled"
-    , "▪ When you are editing the shape hold shift "
+    , "- When you are editing the shape hold shift "
     , "  key to drag the graph"
-    , "▪ Try holding ctrl while editing shape! "
+    , "- Try holding ctrl while editing shape! "
     ]
 
 

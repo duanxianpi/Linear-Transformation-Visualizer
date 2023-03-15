@@ -3,16 +3,20 @@
 -- and showing the graph
 
 
-module L03G1MatrixModel2 exposing (BinOp(..), CalcMatrix, DisplayMatrix, MathExpr(..), Matrix, Model, Msg(..), UnaryOp(..), applyMutipleTrans, applyMutipleTransAux, applyTransformation, calcMatrix, eval, evalMatrix, evalMatrixSvg, fromJust, getMatrixColCount, getMatrixRowCount, horiShear, identityMatrix, init, latex2Svg, listPair, main, mat, mathString, matrixSvg, matrixToLatex, matrixToPoints, matrixToStringList, matrixToUrl, matrixTranspose, matt, mm, myShapes, pointsToMatrix, reflectOrigin, reflectX, reflectY, reflectYeqNegX, reflectYeqX, rotateMatrixD, rotateMatrixR, rowMultiple, scaleMatrix, simMatrixSvg, sumRow, update, vertShear, view)
+module L03G1MatrixModel2 exposing (BinOp(..), CalcMatrix, DisplayMatrix, MathExpr(..), Matrix, Model, Msg(..), UnaryOp(..), applyMutipleTrans, applyMutipleTransAux, applyTransformation, calcMatrix, eval, evalMatrix, evalMatrixSvg, fromJust, getMatrixColCount, getMatrixRowCount, horiShear, identityMatrix, init, latex2Svg, listPair, main, mat, mathString, matrixSvg, matrixToLatex, matrixToPoints, matrixToStringList, matrixTranspose, matt, mm, myShapes, roundMatrix ,pointsToMatrix, reflectOrigin, reflectX, reflectY, reflectYeqNegX, reflectYeqX, rotateMatrixD, rotateMatrixR, rowMultiple, scaleMatrix, simMatrixSvg, sumRow, update, vertShear, view)
 
 import Html
 import Html.Attributes
 import GraphicSVG exposing (..)
 import GraphicSVG.EllieApp exposing (..)
-
+import Html exposing (Html, button, div, node, text)
+import Html.Attributes exposing (attribute)
+import Json.Encode as Encode
+import Http
+import Round
 
 myShapes model =
-    [ text (Debug.toString (getMatrixColCount matt))
+    [ GraphicSVG.text (Debug.toString (getMatrixColCount matt))
         |> size 5
         |> filled black
         |> move ( -80, 0 )
@@ -219,10 +223,10 @@ eval expr =
         Func1 unaryOp e ->
             case unaryOp of
                 CosR ->
-                    cos (eval e)
+                    cos ((eval e) * pi)
 
                 SinR ->
-                    sin (eval e)
+                    sin ((eval e) * pi)
 
                 CosD ->
                     cos (degrees (eval e))
@@ -247,7 +251,9 @@ mathString : MathExpr -> Bool -> String
 mathString expr isDisplay =
     case expr of
         Coef c ->
-            "(" ++ String.fromFloat c ++ ")"
+            if c < 0 then
+                "(" ++ String.fromFloat c ++ ")"
+            else String.fromFloat c
 
         PI ->
             "pi"
@@ -255,7 +261,7 @@ mathString expr isDisplay =
         Func2 binOp e1 e2 ->
             case binOp of
                 Add ->
-                    "(" ++ mathString e1 isDisplay ++ " %2B " ++ mathString e2 isDisplay ++ ")"
+                    "(" ++ mathString e1 isDisplay ++ " + " ++ mathString e2 isDisplay ++ ")"
 
                 Mult ->
                     "(" ++ mathString e1 isDisplay ++ " * " ++ mathString e2 isDisplay ++ ")"
@@ -263,24 +269,24 @@ mathString expr isDisplay =
         Func1 unaryOp e ->
             case unaryOp of
                 CosR ->
-                    "cos((" ++ mathString e isDisplay ++ " / " ++ String.fromFloat pi ++ ").round(2) * pi" ++ ")"
+                    "\\cos((" ++ mathString e isDisplay ++ ") * \\pi" ++ ")"
 
                 SinR ->
-                    "sin((" ++ mathString e isDisplay ++ " / " ++ String.fromFloat pi ++ ").round(2) * pi" ++ ")"
+                    "\\sin((" ++ mathString e isDisplay ++ ") * \\pi" ++ ")"
 
                 CosD ->
                     if isDisplay then
-                        "cos(" ++ mathString e isDisplay ++ ")"
+                        "\\cos(" ++ mathString e isDisplay ++ ")"
 
                     else
-                        "cos(" ++ mathString e isDisplay ++ " * pi/180" ++ ")"
+                        "\\cos(" ++ mathString e isDisplay ++ " * \\pi/180" ++ ")"
 
                 SinD ->
                     if isDisplay then
-                        "sin(" ++ mathString e isDisplay ++ ")"
+                        "\\sin(" ++ mathString e isDisplay ++ ")"
 
                     else
-                        "sin(" ++ mathString e isDisplay ++ " * pi/180" ++ ")"
+                        "\\sin(" ++ mathString e isDisplay ++ " * \\pi/180" ++ ")"
 
 
 
@@ -390,6 +396,11 @@ listPair listA listB =
     List.map2 (\x y -> x :: y) listA listB
 
 
+-- Round a matrix 
+roundMatrix : Int -> Matrix -> Matrix
+roundMatrix num matrix =
+    List.map (\x -> List.map (\y -> Coef (Round.roundNum num (eval y))) x) matrix
+
 
 -- Calculate a Matrix
 
@@ -429,105 +440,64 @@ matrixToLatex matrix =
             (List.concat
                 (List.map
                     (\x ->
-                        List.append (List.intersperse " %26 " x)
+                        List.append (List.intersperse " & " x)
                             [ " \\\\ " ]
                     )
                     (matrixToStringList matrix True)
                 )
             )
         ++ "\\end{bmatrix}"
-
-
-
--- Convert a Matrix a url to get SVG
-
-
-matrixToUrl : Matrix -> String
-matrixToUrl matrix =
-    "https://www.1xd3latex2svg.tk/getSvg?latex=\\begin{bmatrix}"
-        ++ List.foldr (++)
-            ""
-            (List.concat
-                (List.map
-                    (\x ->
-                        List.append (List.intersperse " %26 " x)
-                            [ " \\\\ " ]
-                    )
-                    (matrixToStringList matrix True)
-                )
-            )
-        ++ "\\end{bmatrix}"
-
-
 
 -- Convert a latex a url to get SVG
 
 
 latex2Svg latex =
-    let
-        url =
-            latex
-    in
-    [ html 1000
-        1000
-        (Html.img
-            [ Html.Attributes.src ("https://www.1xd3latex2svg.tk/getSvg?latex=" ++ url)
-            , Html.Attributes.style "user-select" "none"
-            , Html.Attributes.draggable "false"
-            ]
-            []
+
+    [ html 500
+        500
+        (
+            latexgenerate latex
         )
-        |> scale 0.2
+        |> scale 0.3
     ]
         |> group
 
+-- Latex
+
+latexgenerate expr =
+  node "katex-expression"
+    [ attribute "expression" expr
+    , attribute "katex-options" (Encode.encode 0 options)
+    ]
+    []
+
+options : Encode.Value
+options =
+    Encode.object
+        [ ( "displayMode", Encode.bool True )
+        ]
 
 
 -- Eval a matrix and get SVG
 
 
 evalMatrixSvg matrix =
-    let
-        url =
-            Debug.toString (matrixToStringList matrix False)
-    in
-    [ html 1000
-        1000
-        (Html.img
-            [ Html.Attributes.src ("https://www.1xd3latex2svg.tk/evalMatrix?list=" ++ url)
-            , Html.Attributes.style "user-select" "none"
-            , Html.Attributes.draggable "false"
-            ]
-            []
-        )
-        |> scale 0.2
-        |> addHyperlink ("https://www.1xd3latex2svg.tk/evalMatrix?list=" ++ url)
-    ]
-        |> group
+    latex2Svg (matrixToLatex matrix)
 
+
+getBook : Cmd Msg
+getBook =
+  Http.get
+    { url = "https://elm-lang.org/assets/public-opinion.txt"
+    , expect = Http.expectString GotResult
+    }
 
 
 -- Simpify a matrix and get SVG
 
 
 simMatrixSvg matrix =
-    let
-        url =
-            Debug.toString (matrixToStringList matrix True)
-    in
-    [ html 1000
-        1000
-        (Html.img
-            [ Html.Attributes.src ("https://www.1xd3latex2svg.tk/simMatrix?list=" ++ url)
-            , Html.Attributes.style "user-select" "none"
-            , Html.Attributes.draggable "false"
-            ]
-            []
-        )
-        |> scale 0.2
-        |> addHyperlink ("https://www.1xd3latex2svg.tk/simMatrix?list=" ++ url)
-    ]
-        |> group
+        latex2Svg (matrixToLatex matrix)
 
 
 
@@ -571,26 +541,47 @@ getMatrixColCount matrix =
 
 
 type Msg
-    = Tick Float GetKeyState
+    = Tick Float GetKeyState | GotResult (Result Http.Error String)
 
 
 type alias Model =
-    { time : Float }
+    { time : Float , getResult : String}
 
 
 update msg model =
     case msg of
         Tick t _ ->
-            { time = t }
+            ( { model | time = t }, Cmd.none )
+
+        GotResult result ->
+                case result of
+                    Ok res ->
+                        ( { model | getResult = res }, Cmd.none )
+
+                    Err _ ->
+                        ( model, Cmd.none )
 
 
 init =
-    { time = 0 }
+    { time = 0, getResult = "" }
 
 
+main : EllieAppWithTick () Model Msg
 main =
-    gameApp Tick { model = init, view = view, update = update, title = "Game Slot" }
+    ellieAppWithTick Tick
+        { init =
+            \_ ->
+                ( init
+                  -- this is the initial state, like you are used to
+                , Cmd.none
+                )
+
+        -- no requests at this time
+        , update = update
+        , view = \model -> { title = "Game Slot", body = view model }
+        , subscriptions = \_ -> Sub.none
+        }
 
 
 view model =
-    collage 192 128 (myShapes model)
+    collage 232 142 (myShapes model)

@@ -221,38 +221,83 @@ shapeVertex coor r rscale =
 
 
 page3 model =
-    [ let
-        xList =
-            List.map (\( i, s ) -> ( i, s.points )) (List.indexedMap Tuple.pair model.shapeList)
-      in
-      List.map
-        (\( i, p ) ->
-            [ L03G1MatrixModel2.latex2Svg ("x_" ++ String.fromInt (i + 1) ++ "=") |> move ( -95, 40 - (toFloat i * 20) )
-            , L03G1MatrixModel2.pointsToMatrix p
-                |> L03G1MatrixModel2.evalMatrixSvg
-                |> move ( -80, 46 - (toFloat i * 20) )
-                |> clip (rect 50 20 |> ghost |> move ( -55, 37 - (toFloat i * 20) ))
-            , rect 50 20
-                |> filled (rgba 0 0 0 0)
-                |> move ( -55, 37 - (toFloat i * 20) )
-                |> addHyperlink ("https://www.1xd3latex2svg.tk/evalMatrix?list=" ++ Debug.toString (L03G1MatrixModel2.matrixToStringList (L03G1MatrixModel2.pointsToMatrix p) False))
-            ]
-                |> group
-        )
-        xList
-        |> group
-    , text "The matrix may not be displayed "
+    [ 
+    --     let
+    --     xList =
+    --         List.map (\( i, s ) -> ( i, s.points )) (List.indexedMap Tuple.pair model.shapeList)
+    --   in
+    --   List.map
+    --     (\( i, p ) ->
+    --         [ L03G1MatrixModel2.latex2Svg ("x_" ++ String.fromInt (i + 1) ++ "=") |> move ( -95, 40 - (toFloat i * 20) )
+    --         , L03G1MatrixModel2.pointsToMatrix p
+    --             |> L03G1MatrixModel2.evalMatrixSvg
+    --             |> move ( -80, 46 - (toFloat i * 20) )
+    --             |> clip (rect 50 20 |> ghost |> move ( -55, 37 - (toFloat i * 20) ))
+    --         ]
+    --             |> group
+    --     )
+    --     xList
+    --     |> group
+
+      text "The matrix use to desrible the "
         |> size 5
         |> filled black
-        |> move ( -100, -38 )
-    , text "completely, please click on it or "
+        |> move ( -100, 40 )
+
+    , text "shape will be "
         |> size 5
         |> filled black
-        |> move ( -100, -43 )
-    , text "check on the grid panel "
+        |> move ( -100, 35 )
+
+    , L03G1MatrixModel2.latex2Svg ("""
+            s=\\left[ \\begin{matrix}
+                        x_1 &		x_2 & \\dots &x_n\\\\
+                        y_1 &		y_2 & \\dots &y_n\\\\
+                    \\end{matrix} \\right] 
+            
+            """) |> move ( -145+50, 37-5 )
+
+
+    , text "Where n is the number of vertexes"
         |> size 5
         |> filled black
-        |> move ( -100, -48 )
+        |> move ( -100, 13-10 )
+    , text "x, y are the coordinate of the "
+        |> size 5
+        |> filled black
+        |> move ( -100, 8-10 )
+
+    , text "vertexes.  "
+        |> size 5
+        |> filled black
+        |> move ( -100, 3-10 )
+
+    , L03G1MatrixModel2.latex2Svg ("""s_1,s_2,s_3,s_4,...""") |> move ( -140+57, 13-15)
+
+    , text "We use "
+        |> size 5
+        |> filled black
+        |> move ( -100, -2-10 )
+
+    , text "to "
+        |> size 5
+        |> filled black
+        |> move ( -45, -2-10 )
+        
+    , text "repersent the different shapes"
+        |> size 5
+        |> filled black
+        |> move ( -100, -2-15 )
+
+    , text "Now Let us do the linear "
+        |> size 5
+        |> filled black
+        |> move ( -100, -29 )
+
+    , text "transformation for each shape "
+        |> size 5
+        |> filled black
+        |> move ( -100, -34 )
     ]
         |> group
 
@@ -270,30 +315,30 @@ page4 model =
                         |> L03G1MatrixModel2.applyMutipleTrans model.transList
                         |> L03G1MatrixModel2.calcMatrix
             in
-            [ L03G1MatrixModel2.latex2Svg ("Ax_" ++ String.fromInt (i + 1) ++ "=") |> move ( -95, 40 - (toFloat i * 20) )
-            , matrix
-                |> L03G1MatrixModel2.evalMatrixSvg
-                |> move ( -75, 44 - (toFloat i * 20) )
-                |> clip (rect 50 20 |> ghost |> move ( -55, 35 - (toFloat i * 20) ))
-            , rect 50 20
+            [ L03G1MatrixModel2.latex2Svg ("T(s_"++ String.fromInt (i + 1) ++")=As_" ++ String.fromInt (i + 1) ++ "=") |> move ( -125, 60 ) |> move ( 0, 0 - (toFloat i * 25) ) |> scale (0.8)
+            , matrix |> (L03G1MatrixModel2.roundMatrix 2)
+                |> L03G1MatrixModel2.evalMatrixSvg 
+                |> move ( -100/0.8, 51 - (toFloat i * 20/0.8) ) |> scale(0.8)
+                |> clip (rect 100 20 |> ghost |> move ( -55-25, 35 - (toFloat i * 20) ))
+            , rect 70 20
                 |> filled (rgba 0 0 0 0)
-                |> move ( -55, 35 - (toFloat i * 20) )
-                |> addHyperlink ("https://www.1xd3latex2svg.tk/evalMatrix?list=" ++ Debug.toString (L03G1MatrixModel2.matrixToStringList matrix False))
+                |> move ( -65, 35 - (toFloat i * 20) ) 
+                |> addHyperlink ("http://latex.codecogs.com/svg.image?" ++ (matrix |> roundMatrix 2 |> L03G1MatrixModel2.matrixToLatex ))
             ]
                 |> group
         )
         xList
         |> group
     , text "The matrix may not be displayed "
-        |> size 5
+        |> size 4
         |> filled black
         |> move ( -100, -38 )
     , text "completely, please click on it or "
-        |> size 5
+        |> size 4
         |> filled black
         |> move ( -100, -43 )
     , text "check on the grid panel "
-        |> size 5
+        |> size 4
         |> filled black
         |> move ( -100, -48 )
     ]
@@ -304,57 +349,57 @@ matrices model =
     [ L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 0 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -90, 33.2 )
+        |> move ( -120+37, 48 )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 1 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -50, 33.2 )
+        |> move ( -90+37, 48 )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 2 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -90, 33.2 - (toFloat 1 * 15) )
+        |> move ( -120+37, 48 - (toFloat 1 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 3 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -50, 33.2 - (toFloat 1 * 15) )
+        |> move ( -90+37, 48 - (toFloat 1 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 4 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -90, 32.2 - (toFloat 2 * 15) )
+        |> move ( -120+37, 48 - (toFloat 2 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 9 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -90, 33.2 - (toFloat 3 * 15) )
+        |> move ( -120+37, 48 - (toFloat 3 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 5 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -70, 33.2 - (toFloat 3 * 15) )
+        |> move ( -90+37, 48 - (toFloat 3 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 6 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -50, 33.2 - (toFloat 3 * 15) )
+        |> move ( -120+37, 48 - (toFloat 4 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 7 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -90, 33.2 - (toFloat 4 * 15) )
+        |> move ( -90+37, 48 - (toFloat 4 * 13) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 8 model.displayMatricesList)))
         |> scale 0.6
-        |> move ( -50, 33.2 - (toFloat 4 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -95, 31 - (toFloat 1 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -95, 31 - (toFloat 2 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -95, 31 - (toFloat 3 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -95, 31 - (toFloat 4 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -55, 31 - (toFloat 0 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -55, 31 - (toFloat 1 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -75, 31 - (toFloat 3 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -55, 31 - (toFloat 3 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -55, 31 - (toFloat 4 * 15) )
-    , L03G1MatrixModel2.latex2Svg " \\, = " |> move ( -95, -42 )
+        |> move ( -120+37, 48 - (toFloat 5 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -135+46, 50 - (toFloat 1 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -135+46, 50 - (toFloat 2 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -135+46, 50 - (toFloat 3 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -135+46, 50 - (toFloat 4 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -107+49, 50 - (toFloat 0 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -107+49, 50 - (toFloat 1 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -135+46, 50 - (toFloat 5 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -107+49, 50 - (toFloat 4 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\times " |> move ( -107+49, 50 - (toFloat 3 * 13) )
+    , L03G1MatrixModel2.latex2Svg " \\ A = " |> move ( -100, 50 - (6.2 * 13) )
     , L03G1MatrixModel2.evalMatrixSvg
-        (L03G1MatrixModel2.identityMatrix |> L03G1MatrixModel2.applyMutipleTrans model.displayMatricesList |> L03G1MatrixModel2.matrixToPoints |> L03G1MatrixModel2.pointsToMatrix)
+        (L03G1MatrixModel2.identityMatrix |> L03G1MatrixModel2.applyMutipleTrans model.displayMatricesList |> L03G1MatrixModel2.matrixToPoints |> L03G1MatrixModel2.pointsToMatrix |> (L03G1MatrixModel2.roundMatrix 2))
         |> scale 0.6
-        |> move ( -88, -40 )
+        |> move ( -120+37, 48 - (6.2 * 13) )
     ]
         |> group
 

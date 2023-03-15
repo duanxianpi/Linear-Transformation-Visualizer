@@ -458,43 +458,43 @@ matrices model =
     [ L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 0 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -100, 33.2 )
+        |> move ( -145+43, 36.2 )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 1 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -60, 33.2 )
+        |> move ( -105+43, 36.2 )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 2 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -100, 33.2 - (toFloat 1 * 20) )
+        |> move ( -145+43, 33.2 - (toFloat 1 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 3 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -60, 33.2 - (toFloat 1 * 20) )
+        |> move ( -105+43, 33.2 - (toFloat 1 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 4 model.displayMatricesList)))
         |> scale 0.5
-        |> move ( -100, 32.2 - (toFloat 2 * 20) )
+        |> move ( -145+43, 32.2 - ( 2.3 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 9 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -60, 33.2 - (toFloat 2 * 20) )
+        |> move ( -105+43, 33.2 - ( 2.2 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 5 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -100, 33.2 - (toFloat 3 * 20) )
+        |> move ( -145+43, 33.2 - ( 3.35 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 6 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -60, 33.2 - (toFloat 3 * 20) )
+        |> move ( -105+43, 33.2 - ( 3.35 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 7 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -100, 33.2 - (toFloat 4 * 20) )
+        |> move ( -145+43, 33.2 - ( 4.5 * 17) )
     , L03G1MatrixModel2.simMatrixSvg
         (Maybe.withDefault L03G1MatrixModel2.identityMatrix (List.head (List.drop 8 model.displayMatricesList)))
         |> scale 0.7
-        |> move ( -60, 33.2 - (toFloat 4 * 20) )
+        |> move ( -105+43, 33.2 - ( 4.5 * 17) )
     ]
         |> group
 
